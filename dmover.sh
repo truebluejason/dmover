@@ -13,25 +13,25 @@ case "$1" in
 	"setup")
 		if [ ! -f ~/.dmoverrc ]; then
 			touch ~/.dmoverrc
-			#chmod +x ~/.dmoverrc
 			echo "#---------------------------------------------------" >> ~/.bash_profile
 			echo "# dmover.sh related config" >> ~/.bash_profile
 			echo "#---------------------------------------------------" >> ~/.bash_profile
-			echo "PATH=$PATH:~/"
-			echo "source ~/dmover.sh" >> ~/.bash_profile
+			echo 'PATH=$PATH:~/' >> ~/.bash_profile
+			echo "source ~/dmover" >> ~/.bash_profile
 			cp dmover.sh ~/
-			chmod +x ~/dmover.sh
+			mv ~/dmover.sh ~/dmover
+			chmod +x ~/dmover
 			echo "Setup is complete."
 			echo "If you haven't, type 'source ~/.bash_profile' in the command line and you're good to go!"
 		else
 			echo "You are already set up and good to go!"
-			echo "Type 'dmover.sh help' in the command line if you need help with the program."
+			echo "Type 'dmover help' in the command line if you need help with the program."
 		fi
 		;;
 	"alias")
 		if [ -z "$2" ]; then
 			echo "You must state the name of the alias."
-			echo "  - Example: dmover.sh alias ALIAS_NAME"
+			echo "  - Example: dmover alias ALIAS_NAME"
 			exit 1
 		elif [ -n "$(echo '$2' | grep ' ')" ]; then
 			echo "Alias name cannot contain white spaces."
@@ -57,11 +57,11 @@ case "$1" in
 		echo "Availabe Commands:"
 		echo "---------------------------------------------------"
 		echo "setup: Run this command before you use the program."
-		echo "  - Example: sh dmover.sh setup && source .bash_profile"
+		echo "  - Example: sh dmover.sh setup && source ~/.bash_profile"
 		echo "alias: Run this command in a directory to set an alias for that directory to be used with goto."
-		echo "  - Example: dmover.sh alias ALIAS_NAME"
+		echo "  - Example: dmover alias ALIAS_NAME"
 		echo "list: Run this command to view all recorded aliases."
-		echo "  - Example: dmover.sh list"
+		echo "  - Example: dmover list"
 		echo "goto: Run this command as a standalone to access a directory through its alias from anywhere."
 		echo "  - Example: goto-ALIAS_NAME"
 		echo "back: Run this command as a standalone to return to the last directory accessed through dmover."
@@ -70,6 +70,6 @@ case "$1" in
 		echo
 		;;
 	*)
-		echo "dmover is online. Run 'dmover.sh help' for more info."
+		echo "dmover is online. Run 'dmover help' for more info."
 		;;
 esac

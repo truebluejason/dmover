@@ -6,4 +6,4 @@ Getting Started:
 - Run `sh dmover.sh setup && source ~/.bash_profile`
 
 Availabe Commands
-- Please run `dmover.sh help after the setup process for more info.`
+- Please run `dmover help after the setup process for more info.`
