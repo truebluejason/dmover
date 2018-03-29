@@ -4,9 +4,9 @@ if [ -f ~/.dmoverrc ]; then
 	while read -r line; do
 		ALIAS_NAME="$(echo $line | cut -d '=' -f1)"
 		ADDRESS="$(echo $line | cut -d '=' -f2)"
-		alias goto-${ALIAS_NAME}="pushd ${ADDRESS}"
+		alias goto-${ALIAS_NAME}="pushd ${ADDRESS} 1>/dev/null"
 	done < ~/.dmoverrc
-	alias back="popd 2>/dev/null || dmover directory stack is empty."
+	alias back="popd 2>/dev/null 1>/dev/null || dmover directory stack is empty."
 fi
 
 case "$1" in
@@ -26,6 +26,18 @@ case "$1" in
 		else
 			echo "You are already set up and good to go!"
 			echo "Type 'dmover help' in the command line if you need help with the program."
+		fi
+		;;
+	"update")
+		if [ -f ~/dmover ]; then
+			rm ~/dmover
+			cp dmover.sh ~/
+			mv ~/dmover.sh ~/dmover
+			chmod +x ~/dmover
+			echo "Update is complete."
+			echo "If you haven't, type 'source ~/.bash_profile' in the command line and you're good to go!"
+		else
+			echo "dmover is up to date or hasn't been installed yet."
 		fi
 		;;
 	"alias")
@@ -58,6 +70,8 @@ case "$1" in
 		echo "---------------------------------------------------"
 		echo "setup: Run this command before you use the program."
 		echo "  - Example: sh dmover.sh setup && source ~/.bash_profile"
+		echo "update: Run this command inside the new dmover directory to update the local dmover."
+		echo "  - Example: sh dmover.sh update"
 		echo "alias: Run this command in a directory to set an alias for that directory to be used with goto."
 		echo "  - Example: dmover alias ALIAS_NAME"
 		echo "list: Run this command to view all recorded aliases."
@@ -66,6 +80,8 @@ case "$1" in
 		echo "  - Example: goto-ALIAS_NAME"
 		echo "back: Run this command as a standalone to return to the last directory accessed through dmover."
 		echo "  - Example: back"
+		echo "dirs: Run this command as a standalone to view history of directories traversed with dmover."
+		echo "  - Example: dirs"
 		echo "PS: dmover will copy itself to its user's home directory. Please do not remove the copy or dmover won't work."
 		echo
 		;;
